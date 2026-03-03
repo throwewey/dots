@@ -1,0 +1,203 @@
+diff --git a/surf.1 b/surf.1
+index c1a7744..c6ac3a0 100644
+--- a/surf.1
++++ b/surf.1
+@@ -8,6 +8,7 @@ surf \- simple webkit-based browser
+ .RB [-c\ cookiefile]
+ .RB [-C\ stylefile]
+ .RB [-e\ xid]
++.RB [-l\ liblocation]
+ .RB [-r\ scriptfile]
+ .RB [-u\ useragent]
+ .RB [-z\ zoomlevel]
+@@ -73,6 +74,9 @@ Disable Images.
+ .B \-I
+ Enable Images.
+ .TP
++.B \-l liblocation
++Overrides default location for cookies, scripts, stylesheets, etc..
++.TP
+ .B \-k
+ Disable kiosk mode (enable key strokes and right click).
+ .TP
+diff --git a/surf.c b/surf.c
+index 7a0f624..6a74722 100644
+--- a/surf.c
++++ b/surf.c
+@@ -145,6 +145,7 @@ typedef struct {
+ } SiteSpecific;
+ 
+ /* Surf */
++static const char *libjoin(const char *s1, const char *s2);
+ static void die(const char *errstr, ...);
+ static void usage(void);
+ static void setup(void);
+@@ -185,39 +186,39 @@ static void cleanup(void);
+ static WebKitWebView *newview(Client *c, WebKitWebView *rv);
+ static void initwebextensions(WebKitWebContext *wc, Client *c);
+ static GtkWidget *createview(WebKitWebView *v, WebKitNavigationAction *a,
+-                             Client *c);
++		Client *c);
+ static gboolean buttonreleased(GtkWidget *w, GdkEvent *e, Client *c);
+ static GdkFilterReturn processx(GdkXEvent *xevent, GdkEvent *event,
+-                                gpointer d);
++		gpointer d);
+ static gboolean winevent(GtkWidget *w, GdkEvent *e, Client *c);
+ static void showview(WebKitWebView *v, Client *c);
+ static GtkWidget *createwindow(Client *c);
+ static gboolean loadfailedtls(WebKitWebView *v, gchar *uri,
+-                              GTlsCertificate *cert,
+-                              GTlsCertificateFlags err, Client *c);
++		GTlsCertificate *cert,
++		GTlsCertificateFlags err, Client *c);
+ static void loadchanged(WebKitWebView *v, WebKitLoadEvent e, Client *c);
+ static void progresschanged(WebKitWebView *v, GParamSpec *ps, Client *c);
+ static void titlechanged(WebKitWebView *view, GParamSpec *ps, Client *c);
+ static void mousetargetchanged(WebKitWebView *v, WebKitHitTestResult *h,
+-                               guint modifiers, Client *c);
++		guint modifiers, Client *c);
+ static gboolean permissionrequested(WebKitWebView *v,
+-                                    WebKitPermissionRequest *r, Client *c);
++		WebKitPermissionRequest *r, Client *c);
+ static gboolean decidepolicy(WebKitWebView *v, WebKitPolicyDecision *d,
+-                             WebKitPolicyDecisionType dt, Client *c);
++		WebKitPolicyDecisionType dt, Client *c);
+ static void decidenavigation(WebKitPolicyDecision *d, Client *c);
+ static void decidenewwindow(WebKitPolicyDecision *d, Client *c);
+ static void decideresource(WebKitPolicyDecision *d, Client *c);
+ static void insecurecontent(WebKitWebView *v, WebKitInsecureContentEvent e,
+-                            Client *c);
++		Client *c);
+ static void downloadstarted(WebKitWebContext *wc, WebKitDownload *d,
+-                            Client *c);
++		Client *c);
+ static void responsereceived(WebKitDownload *d, GParamSpec *ps, Client *c);
+ static void download(Client *c, WebKitURIResponse *r);
+ static gboolean viewusrmsgrcv(WebKitWebView *v, WebKitUserMessage *m,
+-                              gpointer u);
++		gpointer u);
+ static void webprocessterminated(WebKitWebView *v,
+-                                 WebKitWebProcessTerminationReason r,
+-                                 Client *c);
++		WebKitWebProcessTerminationReason r,
++		Client *c);
+ static void closeview(WebKitWebView *v, Client *c);
+ static void destroywin(GtkWidget* w, Client *c);
+ 
+@@ -254,6 +255,7 @@ static Display *dpy;
+ static Client *clients;
+ static GdkDevice *gdkkb;
+ static char *stylefile;
++static char *liblocation;
+ static const char *useragent;
+ static Parameter *curconfig;
+ static int modparams[ParameterLast];
+@@ -275,8 +277,8 @@ static ParamName loadtransient[] = {
+ };
+ 
+ static ParamName loadcommitted[] = {
+-//	AccessMicrophone,
+-//	AccessWebcam,
++	//	AccessMicrophone,
++	//	AccessWebcam,
+ 	CaretBrowsing,
+ 	DarkMode,
+ 	DefaultCharset,
+@@ -284,7 +286,7 @@ static ParamName loadcommitted[] = {
+ 	Geolocation,
+ 	HideBackground,
+ 	Inspector,
+-//	KioskMode,
++	//	KioskMode,
+ 	MediaManualPlay,
+ 	PDFJSviewer,
+ 	RunInFullscreen,
+@@ -304,6 +306,16 @@ static ParamName loadfinished[] = {
+ 
+ /* configuration, allows nested code to access above variables */
+ #include "config.h"
++static const char*
++libjoin(const char *s1, const char *s2)
++{
++	char *build = malloc(strlen(s1) + strlen(s2) + 1);
++	if (build != NULL) {
++		strcpy(build, s1);
++		strcat(build, s2);
++	}
++	return build;
++}
+ 
+ void
+ die(const char *errstr, ...)
+@@ -321,7 +333,7 @@ usage(void)
+ {
+ 	die("usage: surf [-bBdDfFgGiIkKmMnNsStTvwxX]\n"
+ 	    "[-a cookiepolicies ] [-c cookiefile] [-C stylefile] [-e xid]\n"
+-	    "[-r scriptfile] [-u useragent] [-z zoomlevel] [uri]\n");
++	    "[-l liblocation] [-r scriptfile] [-u useragent] [-z zoomlevel] [uri]\n");
+ }
+ 
+ void
+@@ -352,11 +364,19 @@ setup(void)
+ 	curconfig = defconfig;
+ 
+ 	/* dirs and files */
+-	cookiefile = buildfile(cookiefile);
+-	scriptfile = buildfile(scriptfile);
+-	certdir    = buildpath(certdir);
++	if (liblocation) {
++		cookiefile = buildfile(libjoin(liblocation, "/.surf/cookies.txt"));
++		scriptfile = buildfile(libjoin(liblocation, "/.surf/script.js"));
++		certdir    = buildfile(libjoin(liblocation, "/.surf/certificates/"));
++	} else {
++		cookiefile = buildfile(cookiefile);
++		scriptfile = buildfile(scriptfile);
++		certdir    = buildpath(certdir);
++	}
+ 	if (curconfig[Ephemeral].val.i)
+ 		cachedir = NULL;
++	else if (liblocation)
++		cachedir   = buildpath(libjoin(liblocation, "/.surf/cache/"));
+ 	else
+ 		cachedir   = buildpath(cachedir);
+ 
+@@ -369,7 +389,7 @@ setup(void)
+ 		gchanin = g_io_channel_unix_new(spair[0]);
+ 		g_io_channel_set_encoding(gchanin, NULL, NULL);
+ 		g_io_channel_set_flags(gchanin, g_io_channel_get_flags(gchanin)
+-		                       | G_IO_FLAG_NONBLOCK, NULL);
++				| G_IO_FLAG_NONBLOCK, NULL);
+ 		g_io_channel_set_close_on_unref(gchanin, TRUE);
+ 	}
+ 
+@@ -386,7 +406,10 @@ setup(void)
+ 	}
+ 
+ 	if (!stylefile) {
+-		styledir = buildpath(styledir);
++		if (liblocation)
++			styledir = buildpath(libjoin(liblocation, "/.surf/styles/"));
++		else
++			styledir = buildpath(styledir);
+ 		for (i = 0; i < LENGTH(styles); ++i) {
+ 			if (!regcomp(&(styles[i].re), styles[i].regex,
+ 			    REG_EXTENDED)) {
+@@ -1095,6 +1118,8 @@ cleanup(void)
+ 	g_free(stylefile);
+ 	g_free(cachedir);
+ 	XCloseDisplay(dpy);
++	if (liblocation) 
++		g_free(liblocation);
+ }
+ 
+ WebKitWebView *
+@@ -2059,6 +2084,9 @@ main(int argc, char *argv[])
+ 		defconfig[KioskMode].val.i = 1;
+ 		defconfig[KioskMode].prio = 2;
+ 		break;
++	case 'l':
++		liblocation = EARGF(usage());
++		break;
+ 	case 'm':
+ 		defconfig[Style].val.i = 0;
+ 		defconfig[Style].prio = 2;
