@@ -22,4 +22,4 @@ else
     alias q='exit'
 fi
 # Universal
-alias dmenu="dmenu -fn 'Noto Sans 14' -nb '#141b1e' -nf '#dadada' -sb '#6cbfbf' -sf '#141b1e'"
+alias dmenu_long="dmenu -fn 'Noto Sans 14' -nb '#141b1e' -nf '#dadada' -sb '#6cbfbf' -sf '#141b1e'"
