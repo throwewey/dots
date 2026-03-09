@@ -11,7 +11,7 @@ fi
 choice=$(ls $2 | dmenu_long -p "Choose a file to preview: ")
 if [[ $choice != "" && $choice ==  *.md ]]; then
 	pandoc --from markdown --to html $2'/'$choice -o $2'/.tmp.html' 
-	surf -l $1 $2'/.tmp.html' >/dev/null  2>&1 &
+	surf -l $1 -C ~/.local/share/css/markdown.css $2'/.tmp.html' >/dev/null  2>&1 &
 	sleep 5
 	rm $2'/.tmp.html'
 fi

@@ -1,0 +1,38 @@
+body {
+	background-color: 	#141b1e;
+	font-family:		Noto Sans;
+}
+h1 {
+	font-size: 	32px;
+	color: 		#67b0e8;
+	text-align:	center;
+}
+h2 {
+	font-size:	24px;
+	color:		#8ccf7e;	
+	text-align:	center;
+}
+h3 {
+	font-size:	20px;
+	color:		#e5c76b;
+	text-align:	center;
+}
+h4 {
+	font-size:	18px;
+	color:		#6cbfbf;
+	text-align:	center;
+}
+h5 {
+	font-size:	16px;
+	color:		#c47fd5;
+	text-align:	center;
+}
+h6 {
+	font-size:	14px;
+	color:		#b3b9b8;
+	text-align:	center;
+}
+p {
+	font-size:	14px;
+	color:		#dadada;
+}
