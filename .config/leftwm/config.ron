@@ -81,8 +81,6 @@
 //  Program executions
 	(command: Execute, value: "dmenu_run", modifier: ["modkey"], key: "p"),
 	(command: Execute, value: "st", modifier: ["modkey", "Shift"], key: "Return"),
-	(command: Execute, value: "source ~/.dmenu.d/open_bookmarks.sh ~/work", modifier: ["modkey", "Shift"], key: "w"),
-	(command: Execute, value: "source ~/.dmenu.d/open_bookmarks.sh ~/personal", modifier: ["modkey", "Shift"], key: "p"),
 //  Navigating or exiting Leftwm
 	(command: CloseWindow, value: "", modifier: ["modkey", "Shift"], key: "q"),
 	(command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),

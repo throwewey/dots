@@ -21,15 +21,40 @@
 )
 (defalias
   ctl (tap-next esc ctl)
+  w   (tap-next w   (layer-toggle work))
+  p   (tap-next p   (layer-toggle personal))
 
 ;; Run dmenu script via (cmd-button ". ~/.dmenu.d/example.sh")
+  wb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh work")
+  we  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh work")
+  pb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh personal")
+  pe  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh personal")
 )
 (deflayer default 
-  caps _ _ _    _ _ _ _ _ _ _ _ _
-  _    _ _ _    _ _ _ _ _ _ _ [ ] _
-  _    ; , .    p y f g c r l / = _
-  @ctl a o e    u i d h t n s - _  
-  _    ' q j    k x b m w v z 
-  _    _ _ bspc _ _ _ _ _ _ _
-                        _ _ _
+  caps _ _ _    _  _ _ _ _  _ _ _ _
+  _    _ _ _    _  _ _ _ _  _ _ [ ] _
+  _    ; , .    @p y f g c  r l / = _
+  @ctl a o e    u  i d h t  n s - _  
+  _    ' q j    k  x b m @w v z 
+  _    _ _ bspc _  _ _ _ _  _ _
+                         _  _ _
+)
+;; Keychord layers
+(deflayer work
+  _ _ _ _   _ _ _   _ _ _ _ _ _
+  _ _ _ _   _ _ _   _ _ _ _ _ _ _
+  _ _ _ _   _ _ _   _ _ _ _ _ _ _
+  _ _ _ @we _ _ _   _ _ _ _ _ _  
+  _ _ _ _   _ _ @wb _ _ _ _ 
+  _ _ _ _   _ _ _   _ _ _ _
+                      _ _ _
+)
+(deflayer personal
+  _ _ _ _   _ _ _   _ _ _ _ _ _
+  _ _ _ _   _ _ _   _ _ _ _ _ _ _
+  _ _ _ _   _ _ _   _ _ _ _ _ _ _
+  _ _ _ @pe _ _ _   _ _ _ _ _ _  
+  _ _ _ _   _ _ @pb _ _ _ _ 
+  _ _ _ _   _ _ _   _ _ _ _
+                      _ _ _
 )

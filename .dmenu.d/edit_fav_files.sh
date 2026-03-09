@@ -13,13 +13,13 @@ if [[ ! -f "$1"'/favfiles.txt' ]]; then
 	echo $(pwd)'/'$1'/favfiles.txt' > $1'/favfiles.txt'
 fi
 
-# Sourcing aliases for dmenu and running dmenu
-file=$(cat $1'/favfiles.txt' | dmenu_long -p "Select a file to edit: ")
-# Selecting active tmux window and opening file
-session="mysession"
-pane="${session}:$(tmux display-message -p '#W')"
-if [[ $pane != "mysession:startup" && -n $file ]]; then
-	tmux send-keys -t "$pane" C-z 'vi ' $file Enter
-else
-	tmux send-keys -t "$pane" C-z 'echo "failed to open fav file"' Enter
+choice=$(cat $1'/favfiles.txt' | dmenu_long -p "Select a file to edit: ")
+if [[ $choice != "" ]]; then
+	session="mysession"
+	pane="${session}:$(tmux display-message -p '#W')"
+	if [[ $pane != "mysession:startup" && -n $choice ]]; then
+		tmux send-keys -t "$pane" C-z 'vi ' $choice Enter
+	else
+		tmux send-keys -t "$pane" C-z 'echo "failed to open fav file"' Enter
+	fi
 fi
