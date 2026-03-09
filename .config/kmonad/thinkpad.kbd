@@ -27,8 +27,11 @@
 ;; Run dmenu script via (cmd-button ". ~/.dmenu.d/example.sh")
   wb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh work")
   we  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh work")
+  wm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh work work/vault")
+
   pb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh personal")
   pe  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh personal")
+  pm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh personal personal/vault")
 )
 (deflayer default 
   caps _ _ _    _  _ _ _ _  _ _ _ _
@@ -41,20 +44,20 @@
 )
 ;; Keychord layers
 (deflayer work
-  _ _ _ _   _ _ _   _ _ _ _ _ _
-  _ _ _ _   _ _ _   _ _ _ _ _ _ _
-  _ _ _ _   _ _ _   _ _ _ _ _ _ _
-  _ _ _ @we _ _ _   _ _ _ _ _ _  
-  _ _ _ _   _ _ @wb _ _ _ _ 
-  _ _ _ _   _ _ _   _ _ _ _
-                      _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _ _
+  _ _ _ @we _ _ _   _   _ _ _ _ _  
+  _ _ _ _   _ _ @wb @wm _ _ _ 
+  _ _ _ _   _ _ _   _   _ _ _
+                        _ _ _
 )
 (deflayer personal
-  _ _ _ _   _ _ _   _ _ _ _ _ _
-  _ _ _ _   _ _ _   _ _ _ _ _ _ _
-  _ _ _ _   _ _ _   _ _ _ _ _ _ _
-  _ _ _ @pe _ _ _   _ _ _ _ _ _  
-  _ _ _ _   _ _ @pb _ _ _ _ 
-  _ _ _ _   _ _ _   _ _ _ _
-                      _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _ _
+  _ _ _ _   _ _ _   _   _ _ _ _ _ _
+  _ _ _ @pe _ _ _   _   _ _ _ _ _  
+  _ _ _ _   _ _ @pb @pm _ _ _ 
+  _ _ _ _   _ _ _   _   _ _ _
+                        _ _ _
 )

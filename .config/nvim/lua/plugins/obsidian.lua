@@ -1,12 +1,18 @@
 return {
-	"epwalsh/obsidian.nvim",
+	"obsidian-nvim/obsidian.nvim",
 	version = "*",
-	lazy = true,
 	ft = "markdown",
+	---@module 'obsidian'
+	---@type obsidian.config
 	dependencies = {
-		"nvim-lua/plenary.nvim",
+		{
+		'nvim-telescope/telescope.nvim', 
+		version = "*",
+		},
+		'nvim-lua/plenary.nvim',
 	},
 	opts = {
+		legacy_commands = false,
 		workspaces = {
 			{
 			name = "personal",
