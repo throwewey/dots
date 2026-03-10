@@ -17,6 +17,8 @@
     workspaces: [
 //  A 3:2 layout for a 1080p internal monitor
 	(output: "eDP-1", y: 0, x: 150, height: 1080, width: 1620),
+// 1280 x 1024 external display
+	(output: "DP-2", y: 0, x: 1920, height: 1024, width: 1280),
     ],
     tags: [
 	"1",

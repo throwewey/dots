@@ -1,0 +1,38 @@
+;; Keychron Q11 keyboard, customized at QMK, adding shell layers
+(defcfg
+	input (device-file "/dev/input/by-id/usb-Keychron_Keychron_Q11_59006800075041525233322000000000-if01-event-kbd")
+	output (uinput-sink
+		"Keychron Q11 Keyboard"
+		"sleep 1 & setxkbmap -option compose:ralt"
+	)
+	cmp-seq ralt
+	cmp-seq-delay 5
+	fallthrough true
+	allow-cmd true
+)
+(defsrc 
+	w p b e m
+)
+(defalias
+  w   (tap-next w   (layer-toggle work))
+  p   (tap-next p   (layer-toggle personal))
+
+;; Run dmenu script via (cmd-button ". ~/.dmenu.d/example.sh")
+  wb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh ~/work")
+  we  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh ~/work")
+  wm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh ~/work ~/work/vault")
+
+  pb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh ~/personal")
+  pe  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh ~/personal")
+  pm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh ~/personal ~/personal/vault")	
+)
+(deflayer default
+	@w @p _ _ _
+)
+;; Keychord Layers
+(deflayer work
+	_ _ @wb @we @wm
+)
+(deflayer personal
+	_ _ @pb @pe @pm
+)

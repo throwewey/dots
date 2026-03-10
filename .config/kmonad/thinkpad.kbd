@@ -25,13 +25,16 @@
   p   (tap-next p   (layer-toggle personal))
 
 ;; Run dmenu script via (cmd-button ". ~/.dmenu.d/example.sh")
-  wb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh work")
-  we  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh work")
-  wm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh work work/vault")
+  wb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh ~/work")
+  we  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh ~/work")
+  wm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh ~/work ~/work/vault")
 
-  pb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh personal")
-  pe  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh personal")
-  pm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh personal personal/vault")
+  pb  (cmd-button ". ~/.dmenu.d/open_bookmarks.sh ~/personal")
+  pe  (cmd-button ". ~/.dmenu.d/edit_fav_files.sh ~/personal")
+  pm  (cmd-button ". ~/.dmenu.d/preview_markdown.sh ~/personal ~/personal/vault")
+
+;; Run kmonad for other keyboards
+  pk  (cmd-button ". ~/.tmux.d/01_keychron_Q11_keyboard.sh")
 )
 (deflayer default 
   caps _ _ _    _  _ _ _ _  _ _ _ _
@@ -53,11 +56,11 @@
                         _ _ _
 )
 (deflayer personal
-  _ _ _ _   _ _ _   _   _ _ _ _ _
-  _ _ _ _   _ _ _   _   _ _ _ _ _ _
-  _ _ _ _   _ _ _   _   _ _ _ _ _ _
-  _ _ _ @pe _ _ _   _   _ _ _ _ _  
-  _ _ _ _   _ _ @pb @pm _ _ _ 
-  _ _ _ _   _ _ _   _   _ _ _
+  _ _ _ _   _   _ _   _   _ _ _ _ _
+  _ _ _ _   _   _ _   _   _ _ _ _ _ _
+  _ _ _ _   _   _ _   _   _ _ _ _ _ _
+  _ _ _ @pe _   _ _   _   _ _ _ _ _  
+  _ _ _ _   @pk _ @pb @pm _ _ _ 
+  _ _ _ _   _   _ _   _   _ _ _
                         _ _ _
 )
