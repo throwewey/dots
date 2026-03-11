@@ -9,7 +9,7 @@ if [[ $1 == "-h" || $1 == "--help" || $1 == "help" ]]; then
 fi
 
 choice=$(ls $2 | dmenu_long -p "Choose a file to preview: ")
-if [[ $choice != "" && $choice ==  *.md ]]; then
+if [[ $choice != "" && $choice ==  *.md && -x "$(command -v pandoc)" && "$(command -v surf)" ]]; then
 	pandoc --from markdown --to html $2'/'$choice -o $2'/.tmp.html' 
 	surf -l $1 -C ~/.local/share/css/markdown.css $2'/.tmp.html' >/dev/null  2>&1 &
 	sleep 5

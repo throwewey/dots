@@ -7,11 +7,15 @@ if [[ -n $TMUX ]]; then
     alias tkill='tmux kill-pane'
     function vi() {
 	    if [[ $TMUX_PANE == "%0" ]]; then
-		    echo "try using vi in another window"
+			echo "try using vi in another window"
 	    else
-		    filename=$(sed 's/.*\///' <(echo $1))
-		    tmux rename-window $filename
-		    nvim $1
+			filename=$(sed 's/.*\///' <(echo $1))
+			tmux rename-window $filename
+			if [[ -x "$(command -v nvim)" ]]; then
+				nvim $1
+			else
+				echo "Neovim is not installed..."
+			fi
 		    pane=$(sed 's/%//' <(echo $TMUX_PANE))
 		    tmux rename-window nvim-$pane
 	    fi

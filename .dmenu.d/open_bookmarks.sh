@@ -16,6 +16,6 @@ if [[ ! -f "$1"'/bookmarks.txt' ]]; then
 fi
 
 choice=$(cat $1"/bookmarks.txt" | dmenu_long -p "Choose a webpage to open: ")
-if [[ $choice != "" ]]; then
+if [[ $choice != "" && -x "$(command -v surf)" ]]; then
 	surf -l $1 $choice
 fi

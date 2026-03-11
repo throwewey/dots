@@ -19,7 +19,5 @@ if [[ $choice != "" ]]; then
 	pane="${session}:$(tmux display-message -p '#W')"
 	if [[ $pane != "mysession:startup" && -n $choice ]]; then
 		tmux send-keys -t "$pane" C-z 'vi ' $choice Enter
-	else
-		tmux send-keys -t "$pane" C-z 'echo "failed to open fav file"' Enter
 	fi
 fi
