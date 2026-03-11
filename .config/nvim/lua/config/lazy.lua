@@ -27,6 +27,11 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins" },
   },
+    -- colorscheme when installing plugins
+  install = { colorscheme = { "everblush"} },
     -- automatically check for plugin updates
   checker = { enabled = true },
 })
+
+-- Setting colorscheme
+vim.cmd('colorscheme everblush')
