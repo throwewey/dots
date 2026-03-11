@@ -2,6 +2,6 @@
 
 leftwm command "UnloadTheme"
 
-if [[ -x "$(command -v fastcompmgr)" ]]; then 
+if [[ "$(command -v fastcompmgr)" ]]; then 
 	killall fastcompmgr
 fi

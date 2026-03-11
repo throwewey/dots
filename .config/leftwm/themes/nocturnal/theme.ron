@@ -1,8 +1,10 @@
 #![enable(implicit_some)]
-
-border_width: 2
-margin: 5
-workspace_margin: 14
-default_border_color: "#B3B9B8"
-floating_border_color: "#E57474"
-focused_floating_color: "#8CCF7E" 
+(
+	border_width: 2,
+	margin: 5,
+	workspace_margin: 14,
+	default_border_color: "#B3B9B8",
+	floating_border_color: "#E57474",
+	focused_floating_color: "#8CCF7E",
+	gutter: None,
+)

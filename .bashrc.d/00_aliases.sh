@@ -11,7 +11,7 @@ if [[ -n $TMUX ]]; then
 	    else
 			filename=$(sed 's/.*\///' <(echo $1))
 			tmux rename-window $filename
-			if [[ -x "$(command -v nvim)" ]]; then
+			if [[ "$(command -v nvim)" ]]; then
 				nvim $1
 			else
 				echo "Neovim is not installed..."

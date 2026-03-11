@@ -9,9 +9,9 @@ ln -s $SCRIPTPATH/down /tmp/leftwm-theme-down
 
 ## Load wallpaper and compositor
 wallpaper_path=~/.local/share/backgrounds/nocturnal_white_1080p.jpg
-if [[ -x "$(command -v feh)" && -e "$wallpaper_path" ]]; then
+if [[ "$(command -v feh)" && -e "$wallpaper_path" ]]; then
 	feh --no-fehbg --bg-scale "$wallpaper_path"
-
-if [[ -x "$(command -v fastcompmgr)" ]]; then
-	fastcompmgr -c -C -o 1.0 -i 0.7
+fi
+if [[ "$(command -v fastcompmgr)" ]]; then
+	fastcompmgr -c -C -i 0.7
 fi
